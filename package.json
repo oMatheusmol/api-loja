@@ -1,0 +1,68 @@
+{
+	"name": "base-api",
+	"version": "1.0.0",
+	"description": "API NodeJS",
+	"main": "app",
+	"scripts": {
+		"dev": "nodemon app.js --host 0.0.0.0",
+		"build": "npm i & pm2 delete ecosystem.config.yml & pm2 start ecosystem.config.yml",
+		"restart": "pm2 delete ecosystem.config.yml & pm2 start ecosystem.config.yml",
+		"start": "node --tls-min-v1.0 app.js",
+		"test": "nyc --reporter=lcov --reporter=text-summary mocha --reporter spec ./src/test/**/*.test.js ",
+		"rootTest": "mocha --timeout 50000 --reporter spec",
+		"coverage": "nyc --reporter=html npm run test"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"keywords": [
+		"api",
+		"rest"
+	],
+	"author": "Matheus Mol",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.21.1",
+		"config": "^3.3.6",
+		"cors": "^2.8.5",
+		"dateformat": "^4.5.1",
+		"enum": "^3.0.4",
+		"express": "^4.17.1",
+		"express-openapi-validator": "^4.12.6",
+		"fs": "0.0.1-security",
+		"helmet": "^4.4.1",
+		"js-yaml": "^4.0.0",
+		"jsonwebtoken": "^8.5.1",
+		"lodash": "^4.17.21",
+		"memory-cache": "^0.2.0",
+		"moment": "^2.29.1",
+		"mongodb": "^3.6.6",
+		"morgan-body": "^2.6.6",
+		"mssql": "^6.3.2",
+		"path": "^0.12.7",
+		"swagger-ui-express": "^4.1.6",
+		"tracer": "^1.1.4",
+		"winston": "^3.3.3"
+	},
+	"devDependencies": {
+		"@types/chai-http": "^4.2.0",
+		"chai": "^4.3.4",
+		"chai-http": "^4.3.0",
+		"chalk": "^4.1.0",
+		"eslint": "^7.32.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-config-node": "^4.1.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^3.4.0",
+		"faker": "^5.5.3",
+		"mocha": "^8.3.2",
+		"nodemon": "^2.0.7",
+		"nyc": "^15.1.0",
+		"prettier": "^2.3.2"
+	},
+	"directories": {
+		"test": "./app/test"
+	}
+}

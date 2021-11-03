@@ -1,0 +1,361 @@
+openapi: 3.0.3
+info:
+  title: API NodeJS
+  description: API Description
+  version: 1.0.0
+  termsOfService: http://localhost
+
+  license:
+    name: 'MIT'
+    url: http://localhost
+servers:
+  - url: http://localhost:{port}/{basePath}
+    description: Development Server
+    variables:
+      port:
+        enum:
+          - '7000'
+        default: '7000'
+      basePath:
+        default: api/v1
+tags:
+  - name: Auth
+    description: 'Token de acesso'
+
+paths:
+  # Auth #
+  /auth/access-token:
+    post:
+      tags:
+        - Auth
+      summary: Obtem um token de acesso
+      operationId: accessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /auth/refresh-token:
+    get:
+      tags:
+        - Auth
+      summary: Obtem um token
+      operationId: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  # Routes #
+
+  /users:
+    post:
+      tags:
+        - User
+      summary: Cadastra Users
+      operationId: post Users
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profilePicture:
+                  type: string
+                followers:
+                  type: array
+                following:
+                  type: array
+                isPrime:
+                  type: boolean
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /users/follower:
+    post:
+      tags:
+        - User
+      summary: Seguiar Usuario
+      operationId: post follower
+      # security:
+      #   - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                followingUsername:
+                  type: string
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /users/{username}:
+    get:
+      tags:
+        - Users
+      summary: Recupera dados do usuario
+      operationId: get user data
+      # security:
+      # - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            description: Username
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    put:
+      # security:
+      # - ApiKeyAuth: []
+      tags:
+        - Product
+      summary: Altera dados da conta do Usuario
+      operationId: put Usario Conta
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            description: Username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                profilePicture:
+                  type: string
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  #   delete:
+  #     security:
+  #       - BearerAuth: []
+  #     tags:
+  #       - Product
+  #     summary: Deleta dados da consulta Product
+  #     operationId: delete Product
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               id:
+  #                 type: number
+
+  #     responses:
+  #       201:
+  #         description: deleta Product
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/product-deleta"
+  #       401:
+  #         description: UNAUTHORIZED
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/errorResponse"
+  #       500:
+  #         description: INTERNAL_SERVER_ERROR
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/errorResponse"
+
+  # #getproduct route#
+  # /product/{productName}:
+  #   get:
+  #     tags:
+  #       - Product
+  #     summary: Recupera dados do produto pelo productName
+  #     operationId: getProduct
+  #     security:
+  #       - BearerAuth: []
+  #     parameters:
+  #       - in: path
+  #         name: productName
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       200:
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: "#/components/schemas/apiResponse"
+  #       500:
+  #         description: INTERNAL_SERVER_ERROR
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/errorResponse"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    errorResponse:
+      type: object
+      properties:
+        data:
+          type: integer
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+            error:
+              type: string
+    apiResponse:
+      type: object
+      properties:
+        data:
+          type: object
+    users:
+      type: object
+      properties:
+        data:
+          type: object
